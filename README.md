@@ -76,14 +76,14 @@ numbers under "This entry's damage".
 
 ## One-time setup
 
-Everything site-wide lives in `src/config.ts`. Two values are still `TODO` and the build prints a
-warning until they are filled in:
+Everything site-wide lives in `src/config.ts`. One value is still `TODO` and the build prints a
+warning until it is filled in:
 
 - `buttondownUsername`: the signup forms post to Buttondown's embed endpoint for this username.
   Until it is set, **the forms will not work**. After setting it, compare the form in
   `src/components/Signup.astro` with the markup in Buttondown under Settings > Embedding. The field
   names (`email`, plus a hidden `embed=1`) should match.
-- `xHandle`: the footer's X link and the `twitter:site` tag are left out until this is set.
+- `xHandle` is set. The footer X link and the `twitter:site` tag use it.
 
 Hosting setup (done by hand, once):
 
