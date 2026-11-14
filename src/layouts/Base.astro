@@ -1,0 +1,35 @@
+---
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import { SITE } from "../config";
+
+interface Props {
+  /** Page title, without the site name. Leave empty on the home page. */
+  title?: string;
+  description?: string;
+  /** Set to true on pages that render a signup box, so "Subscribe" jumps to it. */
+  hasSignup?: boolean;
+}
+
+const { title, description = SITE.description, hasSignup = false } = Astro.props;
+const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · A public build log`;
+const subscribeHref = hasSignup ? "#subscribe" : "/#subscribe";
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Nav subscribeHref={subscribeHref} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer subscribeHref={subscribeHref} />
+  </body>
+</html>

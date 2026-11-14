@@ -1,0 +1,25 @@
+---
+import Base from "../layouts/Base.astro";
+import { SITE } from "../config";
+import { getEntries, entryLabel } from "../lib/log";
+
+const entries = await getEntries();
+const latest = entries.slice(0, 3);
+---
+
+<Base hasSignup>
+  <h1>Going from not technical to not not technical.</h1>
+  <p>{SITE.description}</p>
+  <section id="subscribe"><h2>Follow along!</h2></section>
+  <section>
+    <h2>Latest entries</h2>
+    {latest.length === 0 && <p>Entry #001 drops soon. Subscribe so you don't miss it.</p>}
+    <ul>
+      {latest.map((entry) => (
+        <li>
+          <a href={`/log/${entry.id}`}>{entryLabel(entry.data.entry)}: {entry.data.title}</a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

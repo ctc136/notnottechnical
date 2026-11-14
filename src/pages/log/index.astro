@@ -1,0 +1,18 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getEntries, entryLabel } from "../../lib/log";
+
+const entries = await getEntries();
+---
+
+<Base title="The log" description="Every entry in the build log, newest first.">
+  <h1>The log</h1>
+  {entries.length === 0 && <p>Entry #001 drops soon. Subscribe so you don't miss it.</p>}
+  <ul>
+    {entries.map((entry) => (
+      <li>
+        <a href={`/log/${entry.id}`}>{entryLabel(entry.data.entry)}: {entry.data.title}</a>
+      </li>
+    ))}
+  </ul>
+</Base>

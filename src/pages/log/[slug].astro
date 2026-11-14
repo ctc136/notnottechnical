@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import { getEntries, entryLabel, formatDate, type LogEntry } from "../../lib/log";
+
+export const getStaticPaths = (async () => {
+  const entries = await getEntries();
+  return entries.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  entry: LogEntry;
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Base title={entry.data.title} description={entry.data.summary} hasSignup>
+  <article>
+    <p>{entryLabel(entry.data.entry)} · {formatDate(entry.data.date)}</p>
+    <h1>{entry.data.title}</h1>
+    <p>{entry.data.summary}</p>
+    <Content />
+  </article>
+  <section id="subscribe"><h2>Follow along!</h2></section>
+</Base>
