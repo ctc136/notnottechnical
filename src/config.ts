@@ -8,7 +8,7 @@ export const SITE = {
   location: "Pittsburgh",
   xHandle: "notnottechnical",
   githubRepo: "https://github.com/ctc136/notnottechnical",
-  buttondownUsername: "TODO", // Chris fills in after creating the account
+  buttondownUsername: "NotNotTechnical",
   cadence: "every other Sunday",
 };
 
