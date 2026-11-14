@@ -1,9 +1,77 @@
 ---
 import Base from "../layouts/Base.astro";
+import AboutCard from "../components/AboutCard.astro";
+import Signup from "../components/Signup.astro";
+import { SITE } from "../config";
 ---
 
-<Base title="About" description="Who's writing this build log, and why." hasSignup>
-  <h1>Who's writing this?</h1>
-  <p>I'm Chris.</p>
-  <section id="subscribe"><h2>Follow along!</h2></section>
+<Base
+  title="About"
+  description="Who's writing this build log, why it exists and what to expect from it."
+  hasSignup
+>
+  <div class="about-page wrap">
+    <p class="eyebrow">← the longer version</p>
+
+    <AboutCard level="h1">
+      <p>
+        I'm {SITE.author}, a {SITE.location} marketer with about 20 years in the business, a couple of
+        kids, and too many cats.
+      </p>
+      <p>
+        In 2025 I started building things with AI: Space Invaders, dashboards, now a robot. I'm not
+        trying to become an engineer. I just want to be the person who can build the thing instead
+        of making a deck about it.
+      </p>
+
+      <h2>What this is</h2>
+      <p>
+        A public build log. {SITE.tagline} Every other Sunday I publish one entry: what I built with
+        AI, what broke, and what I learned fixing it.
+      </p>
+      <p>
+        I'm writing it in public for two reasons. Explaining a thing is the fastest way to find out
+        whether I actually understand it. And if you're starting from the same place I did, the
+        wrong turns are probably more useful to you than the wins.
+      </p>
+
+      <h2>The scoreboard</h2>
+      <p>
+        Every entry keeps score: hours spent building, things shipped, things broken, and the number
+        of times I had to stop and ask <span class="highlight">"wait, what does that mean?"</span>{" "}
+        The totals on the home page add themselves up from each entry. I don't get to fudge them.
+      </p>
+
+      <h2>This site is homework too</h2>
+      <p>
+        I built this site as one of the projects, and the code is public. If you want to see how it
+        works, or how many tries it took, the <a href={SITE.githubRepo}>source is on GitHub</a>.
+      </p>
+      <p>
+        If you're on the same road, <a href="#subscribe">come along</a>. One email{" "}
+        {SITE.cadence}, and you can start with <a href="/log">the log</a>.
+      </p>
+    </AboutCard>
+
+    <Signup variant="inline" />
+  </div>
 </Base>
+
+<style>
+  .about-page {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 56px 96px;
+  }
+
+  .about-page :global(.signup) {
+    margin-top: 32px;
+  }
+
+  @media (max-width: 639.98px) {
+    .about-page {
+      padding-block: 32px 64px;
+    }
+  }
+</style>

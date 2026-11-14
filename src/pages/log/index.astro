@@ -1,18 +1,93 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { getEntries, entryLabel } from "../../lib/log";
+import EntryCard from "../../components/EntryCard.astro";
+import EmptyState from "../../components/EmptyState.astro";
+import { getEntries, type LogEntry } from "../../lib/log";
 
 const entries = await getEntries();
+
+// Group by year, keeping the newest-first order.
+const years = new Map<number, LogEntry[]>();
+for (const entry of entries) {
+  const year = entry.data.date.getUTCFullYear();
+  years.set(year, [...(years.get(year) ?? []), entry]);
+}
 ---
 
 <Base title="The log" description="Every entry in the build log, newest first.">
-  <h1>The log</h1>
-  {entries.length === 0 && <p>Entry #001 drops soon. Subscribe so you don't miss it.</p>}
-  <ul>
-    {entries.map((entry) => (
-      <li>
-        <a href={`/log/${entry.id}`}>{entryLabel(entry.data.entry)}: {entry.data.title}</a>
-      </li>
-    ))}
-  </ul>
+  <div class="log wrap">
+    <header class="log-head">
+      <p class="eyebrow">every entry, newest first</p>
+      <h1 class="log-title">The log</h1>
+    </header>
+
+    {entries.length === 0 && <EmptyState subscribeHref="/#subscribe" />}
+
+    {
+      [...years].map(([year, yearEntries]) => (
+        <section class="log-year" aria-labelledby={`year-${year}`}>
+          <h2 id={`year-${year}`} class="log-year-title">
+            <span class="highlight">{year}</span>
+          </h2>
+          <ul class="log-grid">
+            {yearEntries.map((entry) => (
+              <li>
+                <EntryCard entry={entry} showTags />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
 </Base>
+
+<style>
+  .log {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-block: 56px 96px;
+  }
+
+  .log-head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .log-title {
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .log-year {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .log-year-title {
+    font-size: 1.75rem;
+  }
+
+  .log-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 24px;
+    list-style: none;
+  }
+
+  @media (max-width: 639.98px) {
+    .log {
+      gap: 32px;
+      padding-block: 32px 64px;
+    }
+
+    .log-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+  }
+</style>

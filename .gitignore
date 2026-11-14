@@ -19,3 +19,6 @@ npm-debug.log*
 
 # raw source photos (the cropped avatar lives in public/images/)
 selfie/
+
+# local Claude Code tooling
+.claude/

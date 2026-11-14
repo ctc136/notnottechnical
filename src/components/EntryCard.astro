@@ -1,0 +1,87 @@
+---
+import { entryLabel, formatDate, type LogEntry } from "../lib/log";
+
+interface Props {
+  entry: LogEntry;
+  /** Heading level for the title, so cards nest correctly under the section heading. */
+  level?: "h2" | "h3";
+  /** Show the date and every tag as chips (used on /log). */
+  showTags?: boolean;
+}
+
+const { entry, level: Title = "h3", showTags = false } = Astro.props;
+const { data } = entry;
+const label = showTags
+  ? `${entryLabel(data.entry)} · ${formatDate(data.date)}`
+  : `${entryLabel(data.entry)} · ${data.tags[0]}`;
+---
+
+<a class="card" href={`/log/${entry.id}`}>
+  <p class="card-label">{label}</p>
+  <Title class="card-title">{data.title}</Title>
+  <p class="card-summary">{data.summary}</p>
+  {
+    showTags && (
+      <ul class="tags" aria-label="Tags">
+        {data.tags.map((tag) => (
+          <li class="tag">{tag}</li>
+        ))}
+      </ul>
+    )
+  }
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    height: 100%;
+    padding: 24px;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--card);
+    box-shadow: var(--card-shadow);
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  /* Hover: the card presses 2px into its shadow. */
+  .card:hover,
+  .card:focus-visible {
+    color: var(--text);
+    transform: translate(2px, 2px);
+    box-shadow: 3px 3px 0 #1c1c1c;
+  }
+
+  .card-label {
+    color: var(--red-pen);
+    font-family: var(--font-hand);
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  .card-title {
+    font-size: 1.375rem;
+    line-height: 1.25;
+  }
+
+  .card-summary {
+    color: var(--text-soft);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  .tags {
+    margin-top: auto;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition:
+        transform 120ms ease,
+        box-shadow 120ms ease;
+    }
+  }
+</style>

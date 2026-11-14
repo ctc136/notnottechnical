@@ -11,13 +11,62 @@ const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`);
 ---
 
-<header class="site-header">
-  <nav class="site-nav wrap" aria-label="Main">
+<header>
+  <nav class="nav wrap" aria-label="Main">
     <Logo />
-    <ul class="site-nav-links">
+    <ul class="nav-links">
       <li><a href="/log" aria-current={isCurrent("/log") ? "page" : undefined}>The log</a></li>
       <li><a href="/about" aria-current={isCurrent("/about") ? "page" : undefined}>About</a></li>
-      <li><a class="site-nav-subscribe" href={subscribeHref}>Subscribe</a></li>
+      <li><a class="nav-subscribe" href={subscribeHref}>Subscribe</a></li>
     </ul>
   </nav>
 </header>
+
+<style>
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 16px;
+    padding-block: 24px;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 28px;
+    list-style: none;
+    font-weight: 500;
+  }
+
+  .nav-links a {
+    display: inline-block;
+    padding-block: 6px;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .nav-links a:hover,
+  .nav-links a[aria-current="page"] {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .nav-links a.nav-subscribe {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .nav-links a.nav-subscribe:hover {
+    color: var(--ink-hover);
+  }
+
+  @media (max-width: 420px) {
+    .nav-links {
+      gap: 8px 20px;
+    }
+  }
+</style>

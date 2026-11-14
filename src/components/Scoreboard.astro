@@ -1,0 +1,96 @@
+---
+import { formatNumber, type Scoreboard } from "../lib/log";
+
+interface Props {
+  /** Site-wide totals on the home page, or one entry's own numbers on a post. */
+  scores: Scoreboard;
+}
+
+const { scores } = Astro.props;
+
+const notes = [
+  { label: "hours building", value: scores.hours, color: "yellow" },
+  { label: "things shipped", value: scores.shipped, color: "green" },
+  { label: "things broken", value: scores.broken, color: "pink" },
+  { label: "“wait, what does that mean?”", value: scores.whatDoesThatMean, color: "blue" },
+];
+---
+
+<dl class="scoreboard">
+  {
+    notes.map((note) => (
+      <div class:list={["note", `note-${note.color}`]}>
+        <dt class="note-label">{note.label}</dt>
+        <dd class="note-number">{formatNumber(note.value)}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .scoreboard {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+  }
+
+  /* Number first, label under it, while the markup stays label-then-value. */
+  .note {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 6px;
+    min-width: 0;
+    padding: 20px;
+    box-shadow: var(--note-shadow);
+  }
+
+  .note-number {
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .note-label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .note-yellow {
+    background: var(--sticky-yellow);
+    transform: rotate(-2deg);
+  }
+
+  .note-green {
+    background: var(--sticky-green);
+    transform: rotate(1.5deg);
+  }
+
+  .note-pink {
+    background: var(--sticky-pink);
+    transform: rotate(-1deg);
+  }
+
+  .note-pink .note-number {
+    color: var(--red-pen);
+  }
+
+  .note-blue {
+    background: var(--sticky-blue);
+    transform: rotate(2deg);
+  }
+
+  @media (max-width: 639.98px) {
+    .scoreboard {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .note {
+      transform: none;
+    }
+  }
+</style>

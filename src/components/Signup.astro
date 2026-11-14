@@ -1,0 +1,144 @@
+---
+import { SITE, isSet } from "../config";
+
+interface Props {
+  /** "sticky": the rotated hero note. "inline": the wide box under posts and on /about. */
+  variant?: "sticky" | "inline";
+}
+
+const { variant = "sticky" } = Astro.props;
+
+// Buttondown's embed form: a plain POST with one "email" field. No JavaScript.
+const action = `https://buttondown.com/api/emails/embed-subscribe/${SITE.buttondownUsername}`;
+
+if (!isSet(SITE.buttondownUsername)) {
+  console.warn(
+    "[signup] SITE.buttondownUsername is still TODO in src/config.ts. The signup form will not work until it is set.",
+  );
+}
+---
+
+<section id="subscribe" class:list={["signup", `signup-${variant}`]} aria-labelledby="signup-title">
+  <div class="signup-copy">
+    <h2 id="signup-title" class="signup-title">Follow along!</h2>
+    <p class="signup-pitch">Wins, faceplants, lessons. That's it.</p>
+  </div>
+  <form class="signup-form embeddable-buttondown-form" action={action} method="post">
+    <label for="bd-email">Your email</label>
+    <input
+      id="bd-email"
+      type="email"
+      name="email"
+      placeholder="you@example.com"
+      autocomplete="email"
+      required
+    />
+    <button class="button" type="submit">Count me in</button>
+    <p class="signup-fine">One email {SITE.cadence}. Unsubscribe anytime.</p>
+  </form>
+</section>
+
+<style>
+  .signup {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    background: var(--sticky-yellow);
+    box-shadow: var(--sticky-shadow);
+    scroll-margin-top: 32px;
+  }
+
+  .signup-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signup-title {
+    font-family: var(--font-hand);
+    font-size: 1.875rem;
+    line-height: 1.2;
+  }
+
+  .signup-pitch {
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  .signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .signup-form label {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  .signup-form input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border: var(--border);
+    border-radius: var(--radius-small);
+    background: #fff;
+    color: var(--text);
+    font: 400 1rem var(--font-body);
+  }
+
+  .signup-form input::placeholder {
+    color: #595959;
+    opacity: 1;
+  }
+
+  .signup-form .button {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .signup-fine {
+    color: var(--text-muted);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* Sticky variant: the rotated note in the hero. */
+  .signup-sticky {
+    transform: rotate(1.5deg);
+  }
+
+  /* Inline variant: a wide note with the pitch beside the form. */
+  .signup-inline {
+    gap: 20px 40px;
+    padding: 32px;
+  }
+
+  @media (min-width: 720px) {
+    .signup-inline {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .signup-inline .signup-copy {
+      flex: 1 1 0;
+    }
+
+    .signup-inline .signup-form {
+      flex: 1.2 1 0;
+    }
+  }
+
+  @media (max-width: 639.98px) {
+    .signup-sticky {
+      transform: none;
+    }
+
+    .signup,
+    .signup-inline {
+      padding: 24px;
+    }
+  }
+</style>

@@ -11,10 +11,10 @@ const xUrl = isSet(SITE.xHandle)
   : undefined;
 ---
 
-<footer class="site-footer">
-  <div class="site-footer-inner wrap">
+<footer class="footer">
+  <div class="footer-inner wrap">
     <span>© notnottechnical.com</span>
-    <ul class="site-footer-links">
+    <ul class="footer-links">
       <li><a href="/rss.xml">RSS</a></li>
       {/* The X link appears once SITE.xHandle is filled in. */}
       {xUrl && <li><a href={xUrl} rel="me">X</a></li>}
@@ -23,3 +23,32 @@ const xUrl = isSet(SITE.xHandle)
     </ul>
   </div>
 </footer>
+
+<style>
+  .footer {
+    border-top: var(--border);
+    background: var(--paper);
+  }
+
+  .footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 16px;
+    padding-block: 28px;
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    display: inline-block;
+    padding-block: 4px;
+  }
+</style>

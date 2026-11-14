@@ -3,6 +3,49 @@ import Base from "../layouts/Base.astro";
 ---
 
 <Base title="Page not found" description="This page is not not missing.">
-  <h1>This page is not not missing.</h1>
-  <p><a href="/">Head back home</a></p>
+  <div class="missing wrap">
+    <p class="eyebrow">← error 404</p>
+    <h1 class="missing-title">
+      This page is not <span class="missing-not">not</span>{" "}
+      <span class="highlight">missing.</span>
+    </h1>
+    <p class="missing-text">
+      Whatever was here is gone, moved or never existed. That one's probably on me.
+    </p>
+    <p><a class="button" href="/">Take me home</a></p>
+  </div>
 </Base>
+
+<style>
+  .missing {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-block: 96px 120px;
+  }
+
+  .missing-title {
+    font-size: clamp(2.25rem, 1.2rem + 5vw, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .missing-not {
+    color: var(--ink);
+    font-family: var(--font-hand);
+    letter-spacing: 0;
+  }
+
+  .missing-text {
+    max-width: 520px;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+  }
+
+  @media (max-width: 639.98px) {
+    .missing {
+      padding-block: 48px 72px;
+    }
+  }
+</style>

@@ -1,0 +1,248 @@
+/* ==========================================================================
+   Not Not Technical: design tokens and site-wide styles ("graph-paper notebook")
+   Component-specific styles live next to their markup in src/components/.
+   ========================================================================== */
+
+:root {
+  --paper: #fbfbf8;
+  --grid-line: #e4ecf6; /* 1px lines, 28px squares, on the page background */
+  --text: #1c1c1c;
+  --text-muted: #3d3d3d;
+  --text-soft: #4a4a4a;
+  --ink: #1f3a93; /* primary accent: links, buttons, handwritten "not" */
+  --ink-hover: #14286b;
+  --red-pen: #b42318; /* strikethroughs, entry labels, annotations */
+  --highlighter: #ffe066; /* marker highlight behind key words */
+  --sticky-yellow: #fff8c5;
+  --sticky-green: #dff3e4;
+  --sticky-pink: #fde2e1;
+  --sticky-blue: #e3ebfa;
+  --card: #ffffff;
+  --border: 2px solid #1c1c1c;
+  --card-shadow: 5px 5px 0 #1c1c1c;
+
+  --sticky-shadow: 0 10px 24px rgba(28, 28, 28, 0.12);
+  --note-shadow: 0 6px 14px rgba(28, 28, 28, 0.12);
+  --radius: 6px;
+  --radius-small: 4px;
+
+  --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Kalam", "Segoe Print", "Bradley Hand", cursive;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --wrap: 1120px;
+  --gutter: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 24px;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
+  /* Graph paper: 1px lines, 28px squares. */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+main {
+  flex: 1;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  line-height: 1.2;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: var(--ink);
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--ink-hover);
+}
+
+/* Visible focus on every interactive element. */
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* --- Layout helpers ------------------------------------------------------ */
+
+.wrap {
+  width: 100%;
+  max-width: var(--wrap);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* A reading-width column for posts: about 68 characters of 18px body text. */
+.wrap-narrow {
+  width: 100%;
+  max-width: calc(68ch * 1.125 + var(--gutter) * 2);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section-title {
+  font-size: 2.125rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -100px;
+  z-index: 10;
+  padding: 10px 16px;
+  background: var(--card);
+  border: var(--border);
+  border-radius: var(--radius-small);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --- Handwriting and marker effects -------------------------------------- */
+
+/* Kalam is for annotations only: eyebrows, entry labels, numbers, the inserted "not". */
+.hand {
+  font-family: var(--font-hand);
+}
+
+.eyebrow {
+  font-family: var(--font-hand);
+  font-size: 1.375rem;
+  line-height: 1.3;
+  color: var(--red-pen);
+}
+
+.strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--red-pen);
+  text-decoration-thickness: 4px;
+}
+
+.highlight {
+  padding: 0 4px;
+  background: linear-gradient(transparent 55%, var(--highlighter) 55%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* --- Buttons ------------------------------------------------------------- */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50px;
+  padding: 0 22px;
+  border: var(--border);
+  border-radius: var(--radius-small);
+  background: var(--ink);
+  color: #fff;
+  font: 600 1rem/1.2 var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: var(--ink-hover);
+  color: #fff;
+}
+
+/* --- Tag chips ----------------------------------------------------------- */
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border: 1.5px solid var(--text);
+  border-radius: 999px;
+  background: var(--sticky-blue);
+  color: var(--text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+/* --- Motion -------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

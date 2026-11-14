@@ -1,0 +1,38 @@
+---
+import { existsSync } from "node:fs";
+import path from "node:path";
+
+// The 8-bit portrait lives at public/images/chris-8bit.png.
+// Until that file exists, a neutral placeholder square is shown instead.
+const file = "images/chris-8bit.png";
+const hasPortrait = existsSync(path.join(process.cwd(), "public", file));
+---
+
+{
+  hasPortrait ? (
+    <img
+      class="avatar"
+      src={`/${file}`}
+      alt="8-bit portrait of Chris"
+      width="480"
+      height="480"
+      decoding="async"
+    />
+  ) : (
+    <div class="avatar avatar-placeholder" aria-hidden="true" />
+  )
+}
+
+<style>
+  .avatar {
+    display: block;
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    border: var(--border);
+    border-radius: var(--radius);
+    background: var(--sticky-blue);
+    object-fit: cover;
+    image-rendering: pixelated;
+  }
+</style>

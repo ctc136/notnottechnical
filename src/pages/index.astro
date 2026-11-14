@@ -1,25 +1,229 @@
 ---
 import Base from "../layouts/Base.astro";
+import Signup from "../components/Signup.astro";
+import EntryCard from "../components/EntryCard.astro";
+import EmptyState from "../components/EmptyState.astro";
+import Scoreboard from "../components/Scoreboard.astro";
+import AboutCard from "../components/AboutCard.astro";
 import { SITE } from "../config";
-import { getEntries, entryLabel } from "../lib/log";
+import { getEntries, totalScoreboard } from "../lib/log";
 
 const entries = await getEntries();
 const latest = entries.slice(0, 3);
+const totals = totalScoreboard(entries);
 ---
 
 <Base hasSignup>
-  <h1>Going from not technical to not not technical.</h1>
-  <p>{SITE.description}</p>
-  <section id="subscribe"><h2>Follow along!</h2></section>
-  <section>
-    <h2>Latest entries</h2>
-    {latest.length === 0 && <p>Entry #001 drops soon. Subscribe so you don't miss it.</p>}
-    <ul>
-      {latest.map((entry) => (
-        <li>
-          <a href={`/log/${entry.id}`}>{entryLabel(entry.data.entry)}: {entry.data.title}</a>
-        </li>
-      ))}
-    </ul>
+  <section class="hero wrap">
+    <div class="hero-copy">
+      <p class="eyebrow">← a public build log, est. 2026</p>
+      <h1 class="hero-title">
+        Going from <s class="strike">not technical</s> to{" "}
+        <span class="highlight">not not technical.</span>
+      </h1>
+      <p class="hero-intro">
+        I'm a marketer learning to build with AI, in public. Every other Sunday I write up what I
+        made, what broke, and what I figured out.
+      </p>
+    </div>
+    <div class="hero-signup">
+      <Signup variant="sticky" />
+    </div>
+  </section>
+
+  <section class="latest wrap" aria-labelledby="latest-title">
+    <div class="latest-head">
+      <h2 id="latest-title" class="section-title">Latest entries</h2>
+      {latest.length > 0 && <a class="latest-all" href="/log">See every entry →</a>}
+    </div>
+    {
+      latest.length > 0 ? (
+        <ul class="latest-grid">
+          {latest.map((entry) => (
+            <li>
+              <EntryCard entry={entry} />
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <EmptyState subscribeHref="#subscribe" />
+      )
+    }
+  </section>
+
+  <section class="scores wrap" aria-labelledby="scores-title">
+    <div class="scores-head">
+      <h2 id="scores-title" class="section-title">The scoreboard</h2>
+      <p class="scores-note hand">Running totals. Updated with every entry. Brutally honest.</p>
+    </div>
+    <div class="scores-board">
+      <Scoreboard scores={totals} />
+    </div>
+  </section>
+
+  <section class="about wrap" aria-label="About">
+    <AboutCard>
+      <p>
+        I'm {SITE.author}, a {SITE.location} marketer with about 20 years in the business, a couple of
+        kids, and too many cats.
+      </p>
+      <p>
+        In 2025 I started building things with AI: Space Invaders, dashboards, now a robot. I'm not
+        trying to become an engineer. I just want to be the person who can build the thing instead
+        of making a deck about it.
+      </p>
+      <p>
+        If you're on the same road, <a href="#subscribe">come along</a>. Or read{" "}
+        <a href="/about">the longer version</a>.
+      </p>
+    </AboutCard>
   </section>
 </Base>
+
+<style>
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 56px;
+    padding-block: 72px 64px;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex: 1 1 540px;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+  }
+
+  .hero-title {
+    font-size: clamp(2.25rem, 1.2rem + 5vw, 3.75rem);
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+
+  .hero-intro {
+    max-width: 560px;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    line-height: 1.6;
+  }
+
+  .hero-signup {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+
+  .latest {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-block: 24px 72px;
+  }
+
+  .latest-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .latest-all {
+    font-weight: 500;
+  }
+
+  .latest-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    list-style: none;
+  }
+
+  .scores {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 32px;
+    padding-bottom: 80px;
+  }
+
+  .scores-head {
+    display: flex;
+    flex: 1 1 280px;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .scores-note {
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .scores-board {
+    flex: 2 1 560px;
+    min-width: 0;
+  }
+
+  .about {
+    padding-bottom: 96px;
+  }
+
+  @media (max-width: 899.98px) {
+    .latest-grid {
+      gap: 16px;
+    }
+
+    .latest-grid :global(.card) {
+      padding: 18px;
+    }
+  }
+
+  /* Phones: stack the hero and signup, one card per row. */
+  @media (max-width: 639.98px) {
+    .hero {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 36px;
+      padding-block: 36px 48px;
+    }
+
+    .hero-copy,
+    .hero-signup {
+      flex: none;
+    }
+
+    .hero-intro {
+      font-size: 1.125rem;
+    }
+
+    .latest {
+      padding-bottom: 56px;
+    }
+
+    .latest-grid {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+
+    .latest-grid :global(.card) {
+      padding: 24px;
+    }
+
+    .scores {
+      padding-bottom: 56px;
+    }
+
+    .scores-head,
+    .scores-board {
+      flex: 1 1 100%;
+    }
+
+    .about {
+      padding-bottom: 64px;
+    }
+  }
+</style>

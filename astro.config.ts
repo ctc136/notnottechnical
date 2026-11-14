@@ -8,4 +8,8 @@ export default defineConfig({
   output: "static",
   trailingSlash: "never",
   build: { format: "file" },
+  markdown: {
+    // A light theme whose token colors all pass 4.5:1 on a white code card.
+    shikiConfig: { theme: "github-light-high-contrast" },
+  },
 });
