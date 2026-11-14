@@ -8,9 +8,10 @@ import "@fontsource/kalam/latin-400.css";
 import "@fontsource/kalam/latin-700.css";
 import "../styles/global.css";
 
+import Analytics from "@vercel/analytics/astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
-import { SITE } from "../config";
+import { SITE, isSet } from "../config";
 
 interface Props {
   /** Page title, without the site name. Leave empty on the home page. */
@@ -18,11 +19,56 @@ interface Props {
   description?: string;
   /** Set to true on pages that render a signup box, so "Subscribe" jumps to it. */
   hasSignup?: boolean;
+  /** Path of this page's Open Graph image. Defaults to the home page image. */
+  ogImage?: string;
+  /** Posts pass their details to get article tags and structured data. */
+  article?: { publishedTime: Date; tags: string[] };
+  /** Keep a page (the 404) out of search results. */
+  noindex?: boolean;
 }
 
-const { title, description = SITE.description, hasSignup = false } = Astro.props;
+const {
+  title,
+  description = SITE.description,
+  hasSignup = false,
+  ogImage = "/og/home.png",
+  article,
+  noindex = false,
+} = Astro.props;
+
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · A public build log`;
 const subscribeHref = hasSignup ? "#subscribe" : "/#subscribe";
+
+const site = Astro.site ?? new URL(SITE.url);
+// Clean, slash-less canonical URLs: /about, /log/003-penguins-goal-robot.
+const cleanPath = Astro.url.pathname.replace(/\.html$/, "").replace(/\/index$/, "/").replace(/(.)\/$/, "$1");
+const canonical = new URL(cleanPath, site).href;
+const ogImageUrl = new URL(ogImage, site).href;
+const xHandle = isSet(SITE.xHandle) ? `@${SITE.xHandle.replace(/^@/, "")}` : undefined;
+
+// Structured data. First name only, by design.
+const jsonLd = article
+  ? {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description,
+      datePublished: article.publishedTime.toISOString(),
+      image: ogImageUrl,
+      url: canonical,
+      mainEntityOfPage: canonical,
+      keywords: article.tags.join(", "),
+      author: { "@type": "Person", name: SITE.author, url: new URL("/about", site).href },
+      publisher: { "@type": "Organization", name: SITE.name, url: site.href },
+    }
+  : {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: SITE.name,
+      description: SITE.description,
+      url: site.href,
+      author: { "@type": "Person", name: SITE.author },
+    };
 ---
 
 <!doctype html>
@@ -32,6 +78,45 @@ const subscribeHref = hasSignup ? "#subscribe" : "/#subscribe";
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <meta name="theme-color" content="#fbfbf8" />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.name} href="/rss.xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:title" content={title ?? SITE.name} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title ? `${title} · ${SITE.name}` : `${SITE.name}: ${SITE.tagline}`} />
+    {
+      article && (
+        <>
+          <meta property="article:published_time" content={article.publishedTime.toISOString()} />
+          {article.tags.map((tag) => <meta property="article:tag" content={tag} />)}
+        </>
+      )
+    }
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title ?? SITE.name} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+    {xHandle && <meta name="twitter:site" content={xHandle} />}
+    {xHandle && <meta name="twitter:creator" content={xHandle} />}
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -40,5 +125,7 @@ const subscribeHref = hasSignup ? "#subscribe" : "/#subscribe";
       <slot />
     </main>
     <Footer subscribeHref={subscribeHref} />
+    {/* The only client-side JavaScript on the site. */}
+    <Analytics />
   </body>
 </html>

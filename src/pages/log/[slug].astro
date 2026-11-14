@@ -30,7 +30,13 @@ const { data } = entry;
 const { Content } = await render(entry);
 ---
 
-<Base title={data.title} description={data.summary} hasSignup>
+<Base
+  title={data.title}
+  description={data.summary}
+  hasSignup
+  ogImage={`/og/${entry.id}.png`}
+  article={{ publishedTime: data.date, tags: data.tags }}
+>
   <article class="post wrap-narrow">
     <header class="post-head">
       <p class="eyebrow">

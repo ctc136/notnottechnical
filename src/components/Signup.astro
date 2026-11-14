@@ -1,5 +1,5 @@
 ---
-import { SITE, isSet } from "../config";
+import { SITE } from "../config";
 
 interface Props {
   /** "sticky": the rotated hero note. "inline": the wide box under posts and on /about. */
@@ -8,14 +8,10 @@ interface Props {
 
 const { variant = "sticky" } = Astro.props;
 
-// Buttondown's embed form: a plain POST with one "email" field. No JavaScript.
+// Mirrors Buttondown's embed form (Settings > Embedding): a plain POST to the
+// embed-subscribe endpoint with an "email" field and a hidden "embed" flag. No JavaScript.
 const action = `https://buttondown.com/api/emails/embed-subscribe/${SITE.buttondownUsername}`;
 
-if (!isSet(SITE.buttondownUsername)) {
-  console.warn(
-    "[signup] SITE.buttondownUsername is still TODO in src/config.ts. The signup form will not work until it is set.",
-  );
-}
 ---
 
 <section id="subscribe" class:list={["signup", `signup-${variant}`]} aria-labelledby="signup-title">
@@ -33,6 +29,7 @@ if (!isSet(SITE.buttondownUsername)) {
       autocomplete="email"
       required
     />
+    <input type="hidden" name="embed" value="1" />
     <button class="button" type="submit">Count me in</button>
     <p class="signup-fine">One email {SITE.cadence}. Unsubscribe anytime.</p>
   </form>
