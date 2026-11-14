@@ -5,6 +5,7 @@ import EntryCard from "../components/EntryCard.astro";
 import EmptyState from "../components/EmptyState.astro";
 import Scoreboard from "../components/Scoreboard.astro";
 import AboutCard from "../components/AboutCard.astro";
+import FormQuestion from "../components/FormQuestion.astro";
 import { SITE } from "../config";
 import { getEntries, totalScoreboard } from "../lib/log";
 
@@ -62,6 +63,7 @@ const totals = totalScoreboard(entries);
   </section>
 
   <section class="about wrap" aria-label="About">
+    <FormQuestion />
     <AboutCard>
       <p>
         I'm {SITE.author}, a {SITE.location} marketer with about 20 years in the business, a couple of
@@ -169,6 +171,9 @@ const totals = totalScoreboard(entries);
   }
 
   .about {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
     padding-bottom: 96px;
   }
 
@@ -223,6 +228,7 @@ const totals = totalScoreboard(entries);
     }
 
     .about {
+      gap: 32px;
       padding-bottom: 64px;
     }
   }

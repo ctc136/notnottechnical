@@ -1,0 +1,166 @@
+---
+// A printed form question ("Would you consider yourself technical?") whose two
+// official answers are left blank, with a third one written in by hand.
+// It is a picture made of real text: there are no working form controls here.
+---
+
+<div class="formq">
+  <p class="formq-question">Would you consider yourself technical?</p>
+  <ul class="formq-options">
+    <li>
+      <span class="formq-radio" aria-hidden="true"></span>
+      Yes <span class="visually-hidden">(left blank)</span>
+    </li>
+    <li>
+      <span class="formq-radio" aria-hidden="true"></span>
+      No <span class="visually-hidden">(left blank)</span>
+    </li>
+    <li class="formq-written">
+      <svg class="formq-drawn" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          class="formq-drawn-ring"
+          d="M12.4 2.7c5.4-.4 9.4 3.5 9.2 9.1-.2 5.5-4.3 9.6-9.7 9.5-5.5-.1-9.5-4.3-9.3-9.7C2.8 6.4 6.7 2.8 13 2.4"
+        ></path>
+        <path
+          class="formq-drawn-dot"
+          d="M12.1 7.4c2.6-.2 4.7 1.9 4.6 4.5-.1 2.6-2.2 4.6-4.8 4.5-2.5-.1-4.5-2.2-4.3-4.8.2-2.3 2-4 4.5-4.2z"
+        ></path>
+      </svg>
+      <span class="formq-answer">not not</span>
+      <span class="visually-hidden">(written in by hand, and selected)</span>
+      <span class="formq-note">
+        <svg class="formq-arrow" viewBox="0 0 46 22" aria-hidden="true">
+          <path d="M43 5C31 2 15 5 4 15M4 15l10-1.5M4 15l3.5-8.5"></path>
+        </svg>
+        they forgot one
+      </span>
+    </li>
+  </ul>
+</div>
+
+<style>
+  /* The sheet: a clipping from somebody else's form, set down on the notebook. */
+  .formq {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px 48px;
+    max-width: 860px;
+    margin-inline: auto;
+    padding: 32px 36px;
+    background: var(--card);
+    box-shadow: var(--sticky-shadow);
+    transform: rotate(-1deg);
+  }
+
+  /* The printed parts stay in plain Inter, like the form they came from. */
+  .formq-question {
+    flex: 1 1 300px;
+    font-size: 1.375rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .formq-options {
+    display: flex;
+    flex: 0 1 auto;
+    flex-direction: column;
+    gap: 14px;
+    list-style: none;
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  .formq-options li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+
+  .formq-radio {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border: 1.5px solid var(--text-soft);
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  /* The handwritten parts: an extra circle, filled in, and a red-pen note. */
+  .formq-drawn {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    margin: -2px;
+    overflow: visible;
+  }
+
+  .formq-drawn-ring {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+
+  .formq-drawn-dot {
+    fill: var(--ink);
+  }
+
+  .formq-answer {
+    color: var(--ink);
+    font-family: var(--font-hand);
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .formq-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    color: var(--red-pen);
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    transform: rotate(-3deg);
+  }
+
+  .formq-arrow {
+    flex: none;
+    width: 40px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (max-width: 639.98px) {
+    .formq {
+      padding: 24px;
+      transform: none;
+    }
+
+    .formq-question {
+      flex-basis: 100%;
+      font-size: 1.25rem;
+    }
+
+    .formq-note {
+      margin-left: 0;
+      transform: none;
+    }
+  }
+
+  /* On the narrowest phones the note drops under the answer, so the arrow points up at it. */
+  @media (max-width: 419.98px) {
+    .formq-arrow {
+      transform: scaleY(-1);
+    }
+  }
+</style>

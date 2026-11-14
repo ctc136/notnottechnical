@@ -99,7 +99,7 @@ src/
   content.config.ts    The post frontmatter schema
   content/log/         The posts, one markdown file each (+ _template.md)
   layouts/Base.astro   <head>, meta tags, nav, footer, analytics
-  components/          Logo, Nav, Footer, Signup, EntryCard, Scoreboard, AboutCard, Avatar
+  components/          Logo, Nav, Footer, Signup, EntryCard, Scoreboard, FormQuestion, AboutCard, Avatar
   pages/               One file per route (+ rss.xml, robots.txt and og/ image endpoints)
   lib/log.ts           Loads posts, filters drafts, adds up the scoreboard
   lib/og.ts            Draws the share images
