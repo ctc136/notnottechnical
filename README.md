@@ -151,4 +151,4 @@ Run locally, Best Practices reports one console error: the Vercel Analytics scri
 ## License
 
 Code is [MIT](LICENSE). Post content (`src/content/`) and images (`public/images/`) are
-© Chris, all rights reserved.
+© Chris, all rights reserved; see [LICENSE-CONTENT.md](LICENSE-CONTENT.md).
