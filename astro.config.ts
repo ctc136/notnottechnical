@@ -2,6 +2,8 @@ import { defineConfig } from "astro/config";
 import type { AstroIntegration } from "astro";
 import sitemap from "@astrojs/sitemap";
 import { SITE, isSet } from "./src/config";
+import { satteri } from "@astrojs/markdown-satteri";
+import { imageSize } from "./src/lib/image-size";
 
 /** Warn once per build while placeholder values are still in src/config.ts. */
 const configCheck = (): AstroIntegration => ({
@@ -25,9 +27,12 @@ export default defineConfig({
   output: "static",
   trailingSlash: "never",
   build: { format: "file" },
-  integrations: [sitemap(), configCheck()],
+  // /thanks is only reached after signing up, so it stays out of the sitemap.
+  integrations: [sitemap({ filter: (page) => !page.endsWith("/thanks") }), configCheck()],
   markdown: {
     // A light theme whose token colors all pass 4.5:1 on a white code card.
     shikiConfig: { theme: "github-light-high-contrast" },
+    // Writes each post image's real width and height into the page, so text doesn't jump as images load.
+    processor: satteri({ hastPlugins: [imageSize] }),
   },
 });

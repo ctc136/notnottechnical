@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import AboutCard from "../components/AboutCard.astro";
 import Signup from "../components/Signup.astro";
+import HandArrow from "../components/HandArrow.astro";
 import { SITE } from "../config";
 ---
 
@@ -11,23 +12,24 @@ import { SITE } from "../config";
   hasSignup
 >
   <div class="about-page wrap">
-    <p class="eyebrow">← the longer version</p>
+    <p class="eyebrow">the longer version <HandArrow direction="down" /></p>
 
     <AboutCard level="h1">
       <p>
-        I'm {SITE.author}, a {SITE.location} marketer with about 20 years in the business, a couple of
-        kids, and too many cats.
+        I'm {SITE.author}, a marketer with about 20 years in the business, a couple of kids, and a
+        passion for building.
       </p>
       <p>
-        In 2025 I started building things with AI: Space Invaders, dashboards, now a robot. I'm not
-        trying to become an engineer. I just want to be the person who can build the thing instead
-        of making a deck about it.
+        I started building small things with AI in Feb 2026 and decided to start sharing my journey.
+        I'm not trying to become the next principal software engineer at Anthropic, just looking to
+        build, learn and share.
       </p>
 
       <h2>What this is</h2>
       <p>
-        A public build log. {SITE.tagline} Every other Sunday I publish one entry: what I built with
-        AI, what broke, and what I learned fixing it.
+        A public build log. A guy trying hard to go from not technical to not not technical. Every
+        other Sunday I publish one entry: what I built with AI, what broke, and what I learned
+        fixing it.
       </p>
       <p>
         I'm writing it in public for two reasons. Explaining a thing is the fastest way to find out
@@ -48,7 +50,7 @@ import { SITE } from "../config";
         works, or how many tries it took, the <a href={SITE.githubRepo}>source is on GitHub</a>.
       </p>
       <p>
-        If you're on the same road, <a href="#subscribe">come along</a>. One email{" "}
+        If you're on the same road, <a href="#bd-email">come along</a>. One email{" "}
         {SITE.cadence}, and you can start with <a href="/log">the log</a>.
       </p>
     </AboutCard>

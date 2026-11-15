@@ -86,6 +86,16 @@ const action = `https://buttondown.com/api/emails/embed-subscribe/${SITE.buttond
     font: 400 1rem var(--font-body);
   }
 
+  /* "Subscribe" links land here: keep the note's heading in view above the field. */
+  .signup-form input[type="email"] {
+    scroll-margin-top: 200px;
+  }
+
+  .signup-form input:target {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
   .signup-form input::placeholder {
     color: #595959;
     opacity: 1;

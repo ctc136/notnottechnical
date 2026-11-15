@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import EntryCard from "../../components/EntryCard.astro";
 import EmptyState from "../../components/EmptyState.astro";
+import Signup from "../../components/Signup.astro";
 import { getEntries, type LogEntry } from "../../lib/log";
 
 const entries = await getEntries();
@@ -14,14 +15,25 @@ for (const entry of entries) {
 }
 ---
 
-<Base title="The log" description="Every entry in the build log, newest first.">
+<Base title="The log" description="Every entry in the build log, newest first." hasSignup={entries.length === 0}>
   <div class="log wrap">
     <header class="log-head">
       <p class="eyebrow">every entry, newest first</p>
       <h1 class="log-title">The log</h1>
     </header>
 
-    {entries.length === 0 && <EmptyState subscribeHref="/#subscribe" />}
+    {
+      entries.length === 0 && (
+        <div class="log-empty">
+          <EmptyState subscribeHref="#bd-email" />
+          <p class="log-empty-text">
+            The first entry is being written. Once it's out, every entry will be listed here, newest
+            first, each with its own scoreboard of hours spent, things shipped and things broken.
+          </p>
+          <Signup variant="inline" />
+        </div>
+      )
+    }
 
     {
       [...years].map(([year, yearEntries]) => (
@@ -60,6 +72,19 @@ for (const entry of entries) {
     font-size: clamp(2.25rem, 1.6rem + 3vw, 3.25rem);
     line-height: 1.1;
     letter-spacing: -0.02em;
+  }
+
+  .log-empty {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    max-width: 780px;
+  }
+
+  .log-empty-text {
+    color: var(--text-muted);
+    font-size: 1.125rem;
+    line-height: 1.7;
   }
 
   .log-year {

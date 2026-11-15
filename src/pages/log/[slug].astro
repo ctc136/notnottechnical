@@ -39,6 +39,7 @@ const { Content } = await render(entry);
 >
   <article class="post wrap-narrow">
     <header class="post-head">
+      <a class="post-back" href="/log">← All entries</a>
       <p class="eyebrow">
         {entryLabel(data.entry)} ·{" "}
         <time datetime={data.date.toISOString().slice(0, 10)}>{formatDate(data.date)}</time>
@@ -96,6 +97,12 @@ const { Content } = await render(entry);
     flex-direction: column;
     gap: 16px;
     margin-bottom: 40px;
+  }
+
+  .post-back {
+    align-self: flex-start;
+    font-size: 0.9375rem;
+    font-weight: 500;
   }
 
   .post-title {

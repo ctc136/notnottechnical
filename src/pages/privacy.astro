@@ -1,0 +1,85 @@
+---
+import "../styles/prose.css";
+import Base from "../layouts/Base.astro";
+import { SITE, isSet } from "../config";
+
+const xHandle = isSet(SITE.xHandle) ? SITE.xHandle.replace(/^@/, "") : undefined;
+---
+
+<Base title="Privacy" description="What this site collects, and what it doesn't.">
+  <div class="privacy wrap-narrow">
+    <header class="privacy-head">
+      <p class="eyebrow">the short version: not much</p>
+      <h1 class="privacy-title">Privacy</h1>
+    </header>
+
+    <div class="prose">
+      <h2>If you subscribe</h2>
+      <p>
+        The signup form sends your email address to <a href="https://buttondown.com">Buttondown</a>,
+        the service I use to send the newsletter. Buttondown stores it for me, and I use it for one
+        thing: emailing you when there's a new entry. Every email has an unsubscribe link.
+      </p>
+
+      <h2>Page views</h2>
+      <p>
+        The site uses Vercel Web Analytics to count page views, so I can tell which entries get
+        read. It doesn't set cookies, and it shows me totals rather than a record of what any one
+        person did.
+      </p>
+
+      <h2>Hosting</h2>
+      <p>
+        The site is hosted on Vercel, which keeps standard server logs, the way any web host does.
+      </p>
+
+      <h2>What I don't do</h2>
+      <p>No ads. I don't sell your email address or share it with anyone else.</p>
+
+      <h2>Questions</h2>
+      <p>
+        {
+          xHandle ? (
+            <>
+              Ask me on X: <a href={`https://x.com/${xHandle}`}>@{xHandle}</a>.
+            </>
+          ) : (
+            <>Reply to any newsletter email and it comes straight to me.</>
+          )
+        }
+      </p>
+
+      <p class="privacy-updated">Last updated November 14, 2026.</p>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .privacy {
+    padding-block: 56px 96px;
+  }
+
+  .privacy-head {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 32px;
+  }
+
+  .privacy-title {
+    font-size: clamp(2.25rem, 1.6rem + 3vw, 3.25rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .privacy-updated {
+    color: var(--text-muted);
+    font-size: 1rem;
+  }
+
+  @media (max-width: 639.98px) {
+    .privacy {
+      padding-block: 32px 64px;
+    }
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+import Base from "../layouts/Base.astro";
+import HandArrow from "../components/HandArrow.astro";
+---
+
+<Base title="One more step" description="Check your inbox to confirm your subscription." noindex>
+  <div class="thanks wrap">
+    <p class="eyebrow">one more step <HandArrow direction="down" /></p>
+    <h1 class="thanks-title">Check your <span class="highlight">inbox.</span></h1>
+    <p class="thanks-text">
+      There should be a confirmation email waiting for you. Click the link in it and you're on the
+      list. If it hasn't shown up in a few minutes, have a look in spam.
+    </p>
+    <p class="thanks-actions">
+      <a class="button" href="/">Back to the site</a>
+      <a href="/log">Read the log</a>
+    </p>
+  </div>
+</Base>
+
+<style>
+  .thanks {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    padding-block: 96px 120px;
+  }
+
+  .thanks-title {
+    font-size: clamp(2.25rem, 1.2rem + 5vw, 3.75rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+
+  .thanks-text {
+    max-width: 560px;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+  }
+
+  .thanks-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    font-weight: 500;
+  }
+
+  @media (max-width: 639.98px) {
+    .thanks {
+      padding-block: 48px 72px;
+    }
+  }
+</style>

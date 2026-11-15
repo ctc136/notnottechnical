@@ -56,6 +56,8 @@ To add a new tag, add it to `TAGS` in `src/config.ts` first.
 ### Writing tips
 
 - **Images:** put the file in `public/images/` and reference it as `![alt text](/images/name.png)`.
+- **Keep images light:** they are served as-is, so export screenshots at about 1600px wide or less.
+  Their width and height are filled in for you at build time.
 - **Captions:** add a line of `*italic text*` directly under an image.
 - **Blockquotes** (`> like this`) render as a sticky note.
 - **Code blocks** get a white card and scroll sideways rather than wrapping.
@@ -84,6 +86,13 @@ The signup forms post to Buttondown's embed endpoint for `buttondownUsername`. I
 stops working, compare `src/components/Signup.astro` with the markup in Buttondown under
 Settings > Embedding. The field names (`email`, plus a hidden `embed=1`) should match.
 
+There is a thank-you page at `/thanks` ("Check your inbox"). Nothing links to it: it is there so
+Buttondown can send people back to the site after they sign up, if your plan has a redirect URL
+setting for new subscribers. Point that setting at `https://notnottechnical.com/thanks`.
+
+`/privacy` is a short plain-language note on what the site collects. Update it if you add a new
+service that touches visitor data.
+
 Hosting setup (done by hand, once):
 
 1. Create the public GitHub repo and push `main`.
@@ -99,10 +108,11 @@ src/
   content.config.ts    The post frontmatter schema
   content/log/         The posts, one markdown file each (+ _template.md)
   layouts/Base.astro   <head>, meta tags, nav, footer, analytics
-  components/          Logo, Nav, Footer, Signup, EntryCard, Scoreboard, FormQuestion, AboutCard, Avatar
+  components/          Logo, Nav, Footer, Signup, EntryCard, Scoreboard, FormQuestion, AboutCard, Avatar, HandArrow
   pages/               One file per route (+ rss.xml, robots.txt and og/ image endpoints)
   lib/log.ts           Loads posts, filters drafts, adds up the scoreboard
   lib/og.ts            Draws the share images
+  lib/image-size.ts    Adds width and height to post images so the page doesn't jump
   styles/              Design tokens and global styles, post typography
 public/                Favicons and images, served as-is
 scripts/               The favicon generator
@@ -135,9 +145,14 @@ Run locally, Best Practices reports one console error: the Vercel Analytics scri
   clean URLs, so canonicals, the sitemap and the feed all agree.
 - **Drafts are a dev-only thing.** `npm run dev` shows them (and counts them in the scoreboard so
   the layout can be reviewed); production builds drop them from pages, RSS, the sitemap and share
-  images. With no published posts, the home page and `/log` show "Entry #001 drops soon."
-- **"Subscribe" in the nav** jumps to the signup box on pages that have one (home, posts, about)
-  and to the home page's box everywhere else.
+  images. With no published posts, the home page and `/log` show "Entry #001 drops soon." and the
+  home page hides the scoreboard, since four zeros read as broken.
+- **Post text is about 70 characters wide** (41rem). The spec's 68ch came out nearer 90 real
+  characters, which is tiring to read.
+- **The form question is real radio buttons**, styled in CSS. Picking Yes or No shows a red-pen
+  reply. Nothing is submitted or stored.
+- **"Subscribe" links** point at the email field itself, so the cursor lands in it. On pages
+  without a signup box they go to the one on the home page.
 - **Card labels:** home page cards show the first tag ("Entry #003 · hardware"), matching the
   design. Cards on `/log` show the date there instead, with every tag as a chip below.
 - **The avatar** is `public/images/chris-8bit.png`. If that file is ever missing, a plain

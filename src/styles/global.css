@@ -119,10 +119,10 @@ a:hover {
   padding-inline: var(--gutter);
 }
 
-/* A reading-width column for posts: about 68 characters of 18px body text. */
+/* A reading-width column for posts: about 70 characters of 18px body text. */
 .wrap-narrow {
   width: 100%;
-  max-width: calc(68ch * 1.125 + var(--gutter) * 2);
+  max-width: calc(41rem + var(--gutter) * 2);
   margin-inline: auto;
   padding-inline: var(--gutter);
 }

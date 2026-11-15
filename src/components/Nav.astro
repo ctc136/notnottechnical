@@ -2,7 +2,7 @@
 import Logo from "./Logo.astro";
 
 interface Props {
-  /** Where "Subscribe" points: "#subscribe" on pages with a signup box. */
+  /** Where "Subscribe" points: "#bd-email" on pages with a signup box. */
   subscribeHref: string;
 }
 
@@ -64,9 +64,14 @@ const isCurrent = (href: string) => path === href || path.startsWith(`${href}/`)
     color: var(--ink-hover);
   }
 
-  @media (max-width: 420px) {
+  @media (max-width: 639.98px) {
+    .nav {
+      gap: 4px 16px;
+      padding-block: 14px;
+    }
+
     .nav-links {
-      gap: 8px 20px;
+      gap: 4px 20px;
     }
   }
 </style>

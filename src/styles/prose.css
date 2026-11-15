@@ -1,7 +1,8 @@
 /* Post body typography. Applied to rendered markdown inside `.prose`. */
 
 .prose {
-  max-width: 68ch;
+  /* 41rem holds about 70 characters of 18px Inter, a comfortable line to read. */
+  max-width: 41rem;
   font-size: 1.125rem;
   line-height: 1.7;
   overflow-wrap: break-word;

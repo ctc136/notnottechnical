@@ -1,0 +1,33 @@
+---
+// A small hand-drawn arrow for red-pen annotations. It inherits the text colour.
+interface Props {
+  /** "down" curves down toward whatever sits under the note; "left" points back at the thing beside it. */
+  direction?: "down" | "left";
+}
+
+const { direction = "left" } = Astro.props;
+---
+
+<svg class:list={["hand-arrow", `hand-arrow-${direction}`]} viewBox="0 0 46 22" aria-hidden="true">
+  <path d="M43 5C31 2 15 5 4 15M4 15l10-1.5M4 15l3.5-8.5"></path>
+</svg>
+
+<style>
+  .hand-arrow {
+    display: inline-block;
+    flex: none;
+    width: 40px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vertical-align: middle;
+  }
+
+  .hand-arrow-down {
+    margin-left: 6px;
+    transform: translateY(9px) rotate(-55deg);
+  }
+</style>

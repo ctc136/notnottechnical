@@ -37,7 +37,8 @@ const {
 } = Astro.props;
 
 const pageTitle = title ? `${title} · ${SITE.name}` : `${SITE.name} · A public build log`;
-const subscribeHref = hasSignup ? "#subscribe" : "/#subscribe";
+// Linking to the email field itself puts the cursor in it, not just the page near it.
+const subscribeHref = hasSignup ? "#bd-email" : "/#bd-email";
 
 const site = Astro.site ?? new URL(SITE.url);
 // Clean, slash-less canonical URLs: /about, /log/003-penguins-goal-robot.

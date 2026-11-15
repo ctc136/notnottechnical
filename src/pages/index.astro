@@ -6,6 +6,7 @@ import EmptyState from "../components/EmptyState.astro";
 import Scoreboard from "../components/Scoreboard.astro";
 import AboutCard from "../components/AboutCard.astro";
 import FormQuestion from "../components/FormQuestion.astro";
+import HandArrow from "../components/HandArrow.astro";
 import { SITE } from "../config";
 import { getEntries, totalScoreboard } from "../lib/log";
 
@@ -17,7 +18,7 @@ const totals = totalScoreboard(entries);
 <Base hasSignup>
   <section class="hero wrap">
     <div class="hero-copy">
-      <p class="eyebrow">← a public build log, est. 2026</p>
+      <p class="eyebrow">a public build log, est. 2026 <HandArrow direction="down" /></p>
       <h1 class="hero-title">
         Going from <s class="strike">not technical</s> to{" "}
         <span class="highlight">not not technical.</span>
@@ -47,35 +48,35 @@ const totals = totalScoreboard(entries);
           ))}
         </ul>
       ) : (
-        <EmptyState subscribeHref="#subscribe" />
+        <EmptyState subscribeHref="#bd-email" />
       )
     }
   </section>
 
-  <section class="scores wrap" aria-labelledby="scores-title">
-    <div class="scores-head">
-      <h2 id="scores-title" class="section-title">The scoreboard</h2>
-      <p class="scores-note hand">Running totals. Updated with every entry. Brutally honest.</p>
-    </div>
-    <div class="scores-board">
-      <Scoreboard scores={totals} />
-    </div>
-  </section>
+  {
+    /* The scoreboard shows up with the first published entry; four zeros just look broken. */
+    entries.length > 0 && (
+      <section class="scores wrap" aria-labelledby="scores-title">
+        <div class="scores-head">
+          <h2 id="scores-title" class="section-title">The scoreboard</h2>
+          <p class="scores-note hand">Running totals. Updated with every entry. Brutally honest.</p>
+        </div>
+        <div class="scores-board">
+          <Scoreboard scores={totals} />
+        </div>
+      </section>
+    )
+  }
 
   <section class="about wrap" aria-label="About">
     <FormQuestion />
     <AboutCard>
       <p>
-        I'm {SITE.author}, a {SITE.location} marketer with about 20 years in the business, a couple of
-        kids, and too many cats.
+        I'm {SITE.author}, a marketer with about 20 years in the business, a couple of kids, and a
+        passion for building.
       </p>
       <p>
-        In 2025 I started building things with AI: Space Invaders, dashboards, now a robot. I'm not
-        trying to become an engineer. I just want to be the person who can build the thing instead
-        of making a deck about it.
-      </p>
-      <p>
-        If you're on the same road, <a href="#subscribe">come along</a>. Or read{" "}
+        If you're on the same road, <a href="#bd-email">come along</a>. Or read{" "}
         <a href="/about">the longer version</a>.
       </p>
     </AboutCard>
