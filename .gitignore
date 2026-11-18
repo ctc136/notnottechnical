@@ -22,3 +22,6 @@ selfie/
 
 # local Claude Code tooling
 .claude/
+
+# private post-idea outlines (kept local, not published)
+post-ideas/
