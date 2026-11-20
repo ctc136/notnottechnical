@@ -1,0 +1,374 @@
+---
+// "Technical?": a just-for-fun prize wheel for the home page about card. It leans hard toward
+// one half, nearly commits, then stops dead on the dividing line and reveals the real answer.
+// Vanilla JS, nothing is sent anywhere.
+// Without JavaScript the wheel and button stay hidden and the static reveal shows instead.
+---
+
+<div class="tg" data-tg>
+  <h3 class="tg-title">Technical?</h3>
+  <div class="tg-play">
+    <div
+      class="tg-wheel"
+      role="img"
+      aria-label="A prize wheel, half technical and half not technical."
+      data-tg-wheel
+      hidden
+    >
+      <svg class="tg-pointer" viewBox="0 0 26 24" data-tg-pointer>
+        <path d="M3 3h20L13 21z"></path>
+      </svg>
+      <div class="tg-wheel-spin" data-tg-wheel-spin>
+        <svg class="tg-wheel-disc" viewBox="0 0 200 200">
+          <path class="tg-half-tech" d="M100 5A95 95 0 0 0 100 195Z"></path>
+          <path class="tg-half-not" d="M100 5A95 95 0 0 1 100 195Z"></path>
+          <line class="tg-divider" x1="100" y1="5" x2="100" y2="195"></line>
+          <text class="tg-label" x="49" y="106">technical</text>
+          <text class="tg-label" x="150" y="93">not</text>
+          <text class="tg-label" x="150" y="115">technical</text>
+          <circle class="tg-hub" cx="100" cy="100" r="8"></circle>
+        </svg>
+      </div>
+    </div>
+
+    <div class="tg-side">
+      <div class="tg-msg">
+        <p class="tg-prompt" data-tg-prompt hidden></p>
+        <div class="tg-reveal" aria-live="polite" data-tg-reveal>
+          <p class="tg-result" data-tg-result>
+            <s class="strike">technical</s><span class="visually-hidden"> (crossed out), </span>
+            <s class="strike">not technical</s><span class="visually-hidden"> (crossed out), </span>
+            <span class="tg-final"><span class="highlight">not not technical.</span></span>
+          </p>
+          <p class="tg-quip" data-tg-quip></p>
+        </div>
+      </div>
+      <button type="button" class="button tg-button" data-tg-button hidden>Spin the wheel</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* A sticky note on the about card, like the signup note in the hero. */
+  .tg {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 20px 24px 24px;
+    background: var(--sticky-green);
+    box-shadow: var(--note-shadow);
+    color: var(--text);
+    line-height: 1.4;
+    transform: rotate(-0.6deg);
+  }
+
+  /* .button sets its own display, which would beat the hidden attribute. */
+  .tg [hidden] {
+    display: none !important;
+  }
+
+  .tg-title {
+    color: var(--ink);
+    font-family: var(--font-hand);
+    font-size: 1.875rem;
+    line-height: 1.1;
+  }
+
+  .tg-play {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 28px;
+  }
+
+  /* --- The wheel: an SVG disc that spins under a fixed pointer. --- */
+
+  .tg-wheel {
+    position: relative;
+    flex: none;
+    width: 150px;
+    height: 150px;
+    margin: 6px 3px 0;
+  }
+
+  .tg-wheel-spin {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tg-wheel-disc {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .tg-half-tech,
+  .tg-half-not,
+  .tg-divider,
+  .tg-hub {
+    stroke: var(--text);
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+
+  .tg-half-tech {
+    fill: var(--sticky-blue);
+  }
+
+  .tg-half-not {
+    fill: var(--sticky-pink);
+  }
+
+  .tg-hub {
+    fill: var(--card);
+  }
+
+  .tg-label {
+    fill: var(--ink);
+    font-family: var(--font-hand);
+    font-size: 17px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .tg-pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    z-index: 1;
+    width: 26px;
+    height: 24px;
+    margin-left: -13px;
+    overflow: visible;
+    fill: var(--red-pen);
+    stroke: var(--text);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    transform-origin: 50% 10%;
+  }
+
+  /* --- The answer side --- */
+
+  .tg-side {
+    display: flex;
+    flex: 1 1 200px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  /* Prompt and reveal share one cell, tall enough for the reveal, so nothing jumps. */
+  .tg-msg {
+    display: grid;
+    align-items: center;
+    width: 100%;
+    min-height: 6.5rem;
+  }
+
+  .tg-prompt,
+  .tg-reveal {
+    grid-area: 1 / 1;
+  }
+
+  .tg-prompt {
+    color: var(--text-muted);
+    font-family: var(--font-hand);
+    font-size: 1.375rem;
+    line-height: 1.3;
+  }
+
+  .tg-reveal {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tg-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .tg-result .strike {
+    color: var(--text-soft);
+    text-decoration-thickness: 3px;
+  }
+
+  .tg-final {
+    flex-basis: 100%;
+    font-size: 1.625rem;
+    line-height: 1.2;
+  }
+
+  .tg-quip {
+    color: var(--red-pen);
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    transform: rotate(-1.5deg);
+    transform-origin: left center;
+  }
+
+  .tg-quip:empty {
+    display: none;
+  }
+
+  .tg-button[aria-disabled="true"],
+  .tg-button[aria-disabled="true"]:hover {
+    background: var(--ink);
+    cursor: progress;
+    opacity: 0.55;
+  }
+
+  /* After a spin, the answer arrives in beats. The global reduced-motion rule flattens these. */
+  .tg.is-played .tg-result > *,
+  .tg.is-played .tg-quip {
+    animation: tg-in 0.35s ease-out both;
+  }
+
+  .tg.is-played .tg-final {
+    animation-delay: 0.35s;
+  }
+
+  .tg.is-played .tg-quip {
+    animation-delay: 0.7s;
+  }
+
+  @keyframes tg-in {
+    from {
+      opacity: 0;
+      translate: 0 6px;
+    }
+  }
+
+  @media (max-width: 639.98px) {
+    .tg {
+      padding: 18px 20px 22px;
+      transform: none;
+    }
+
+    .tg-play {
+      justify-content: center;
+    }
+
+    .tg-side {
+      flex-basis: 100%;
+    }
+  }
+</style>
+
+<script>
+  const SPIN_MS = 3300;
+  const REPEAT_QUIPS = [
+    "still undecided.",
+    "the wheel has spoken. sort of.",
+    "best of three?",
+    "best of five?",
+    "it's not broken. it's just honest.",
+  ];
+
+  /** Plays keyframes, then bakes the end state into inline style so animations don't pile up. */
+  async function play(el: HTMLElement, frames: Keyframe[], duration: number): Promise<void> {
+    const animation = el.animate(frames, { duration, fill: "forwards" });
+    try {
+      await animation.finished;
+    } catch {
+      // Cancelled; the end state below still applies.
+    }
+    el.style.transform = String(frames[frames.length - 1].transform);
+    animation.cancel();
+  }
+
+  function init(root: HTMLElement) {
+    const wheel = root.querySelector<HTMLElement>("[data-tg-wheel]");
+    const wheelSpin = root.querySelector<HTMLElement>("[data-tg-wheel-spin]");
+    const pointer = root.querySelector<SVGElement>("[data-tg-pointer]");
+    const prompt = root.querySelector<HTMLElement>("[data-tg-prompt]");
+    const reveal = root.querySelector<HTMLElement>("[data-tg-reveal]");
+    const result = root.querySelector<HTMLElement>("[data-tg-result]");
+    const quip = root.querySelector<HTMLElement>("[data-tg-quip]");
+    const button = root.querySelector<HTMLButtonElement>("[data-tg-button]");
+    if (!wheel || !wheelSpin || !pointer || !prompt || !reveal || !result || !quip || !button) {
+      return;
+    }
+
+    let angle = 0;
+    let plays = 0;
+    let running = false;
+
+    // Swap the static reveal for the game.
+    wheel.hidden = false;
+    reveal.replaceChildren();
+    prompt.textContent = "Two halves. One spin. Let's settle this.";
+    prompt.hidden = false;
+    button.hidden = false;
+
+    // Long spin, a slow creep that nearly stops inside one half, then a last nudge onto the line.
+    // The direction decides which half it flirts with; it always ends upright on the divider.
+    async function spin(reduced: boolean) {
+      if (reduced) {
+        angle = 0;
+        wheelSpin!.style.transform = "rotate(0deg)";
+        return;
+      }
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const end = dir === 1 ? Math.ceil((angle + 1440) / 360) * 360 : Math.floor((angle - 1440) / 360) * 360;
+      const turn = play(
+        wheelSpin!,
+        [
+          { transform: `rotate(${angle}deg)`, easing: "cubic-bezier(.15,.6,.4,.9)" },
+          { transform: `rotate(${end - dir * 58}deg)`, offset: 0.55, easing: "cubic-bezier(.2,.5,.45,1)" },
+          { transform: `rotate(${end - dir * 8}deg)`, offset: 0.82, easing: "cubic-bezier(.45,0,.55,1)" },
+          { transform: `rotate(${end + dir * 2.5}deg)`, offset: 0.95, easing: "ease-out" },
+          { transform: `rotate(${end}deg)` },
+        ],
+        SPIN_MS,
+      );
+      // The pointer flicks as the divider clicks past it at the very end.
+      const tick = pointer!.animate(
+        [
+          { transform: "rotate(0deg)" },
+          { transform: `rotate(${dir * -16}deg)`, offset: 0.4 },
+          { transform: `rotate(${dir * 5}deg)`, offset: 0.75 },
+          { transform: "rotate(0deg)" },
+        ],
+        { duration: 380, delay: SPIN_MS * 0.89, easing: "ease-out" },
+      );
+      await Promise.all([turn, tick.finished.catch(() => undefined)]);
+      angle = 0;
+      wheelSpin!.style.transform = "rotate(0deg)";
+    }
+
+    button.addEventListener("click", async () => {
+      if (running) return;
+      running = true;
+      // aria-disabled, not disabled, so keyboard focus stays on the button.
+      button.setAttribute("aria-disabled", "true");
+      reveal.replaceChildren();
+      prompt.textContent = "spinning…";
+      prompt.hidden = false;
+
+      await spin(window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+      plays += 1;
+      quip.textContent =
+        plays === 1 ? "dead on the line. of course it did." : REPEAT_QUIPS[(plays - 2) % REPEAT_QUIPS.length];
+      prompt.hidden = true;
+      root.classList.add("is-played");
+      reveal.replaceChildren(result, quip);
+      button.textContent = "Try again";
+      button.removeAttribute("aria-disabled");
+      running = false;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-tg]").forEach(init);
+</script>
