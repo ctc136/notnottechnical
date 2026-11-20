@@ -1,0 +1,520 @@
+---
+// "Technical?": a just-for-fun game for the home page about card. Visits alternate between a
+// coin flip and a prize wheel. Both lean hard one way, nearly commit, then end dead in the
+// middle and reveal the real answer. Vanilla JS, nothing is sent anywhere.
+// Without JavaScript the stage and button stay hidden and the static reveal shows instead.
+---
+
+<div class="tg" data-tg>
+  <h3 class="tg-title">Technical?</h3>
+  <div class="tg-play">
+    <div class="tg-stage" role="img" data-tg-stage hidden>
+      <div class="tg-coin-toss" data-tg-coin hidden>
+        <div class="tg-coin" data-tg-coin-spin>
+          <span class="tg-face tg-face-front">technical</span>
+          <span class="tg-rim"></span>
+          <span class="tg-face tg-face-back">not technical</span>
+        </div>
+      </div>
+      <div class="tg-wheel" data-tg-wheel hidden>
+        <svg class="tg-pointer" viewBox="0 0 26 24" data-tg-pointer>
+          <path d="M3 3h20L13 21z"></path>
+        </svg>
+        <div class="tg-wheel-spin" data-tg-wheel-spin>
+          <svg class="tg-wheel-disc" viewBox="0 0 200 200">
+            <path class="tg-half-tech" d="M100 5A95 95 0 0 0 100 195Z"></path>
+            <path class="tg-half-not" d="M100 5A95 95 0 0 1 100 195Z"></path>
+            <line class="tg-divider" x1="100" y1="5" x2="100" y2="195"></line>
+            <text class="tg-label" x="49" y="106">technical</text>
+            <text class="tg-label" x="150" y="93">not</text>
+            <text class="tg-label" x="150" y="115">technical</text>
+            <circle class="tg-hub" cx="100" cy="100" r="8"></circle>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="tg-side">
+      <div class="tg-msg">
+        <p class="tg-prompt" data-tg-prompt hidden></p>
+        <div class="tg-reveal" aria-live="polite" data-tg-reveal>
+          <p class="tg-result" data-tg-result>
+            <s class="strike">technical</s><span class="visually-hidden"> (crossed out), </span>
+            <s class="strike">not technical</s><span class="visually-hidden"> (crossed out), </span>
+            <span class="tg-final"><span class="highlight">not not technical.</span></span>
+          </p>
+          <p class="tg-quip" data-tg-quip></p>
+        </div>
+      </div>
+      <button type="button" class="button tg-button" data-tg-button hidden>Flip the coin</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* A sticky note on the about card, like the signup note in the hero. */
+  .tg {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 20px 24px 24px;
+    background: var(--sticky-green);
+    box-shadow: var(--note-shadow);
+    color: var(--text);
+    line-height: 1.4;
+    transform: rotate(-0.6deg);
+  }
+
+  /* .button and the stage set their own display, which would beat the hidden attribute. */
+  .tg [hidden] {
+    display: none !important;
+  }
+
+  .tg-title {
+    color: var(--ink);
+    font-family: var(--font-hand);
+    font-size: 1.875rem;
+    line-height: 1.1;
+  }
+
+  .tg-play {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px 28px;
+  }
+
+  .tg-stage {
+    position: relative;
+    display: grid;
+    flex: none;
+    place-items: center;
+    width: 156px;
+    height: 156px;
+    perspective: 520px;
+  }
+
+  /* --- Coin: two faces back to back, plus a dark rim that shows when it's on its edge. --- */
+
+  .tg-coin-toss {
+    width: 132px;
+    height: 132px;
+  }
+
+  .tg-coin {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+  }
+
+  .tg-face {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 18px;
+    border: var(--border);
+    border-radius: 50%;
+    color: var(--ink);
+    font: 700 1.3rem/1.05 var(--font-hand);
+    text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+
+  .tg-face-front {
+    background: var(--sticky-blue);
+    transform: translateZ(5px);
+  }
+
+  .tg-face-back {
+    background: var(--sticky-pink);
+    transform: rotateY(180deg) translateZ(5px);
+  }
+
+  .tg-rim {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 10px;
+    margin-left: -5px;
+    border-radius: 3px;
+    background: var(--text);
+    transform: rotateY(90deg);
+  }
+
+  /* --- Wheel: an SVG disc that spins under a fixed pointer. --- */
+
+  .tg-wheel {
+    position: relative;
+    width: 150px;
+    height: 150px;
+  }
+
+  .tg-wheel-spin {
+    width: 100%;
+    height: 100%;
+  }
+
+  .tg-wheel-disc {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .tg-half-tech,
+  .tg-half-not,
+  .tg-divider,
+  .tg-hub {
+    stroke: var(--text);
+    stroke-width: 3;
+    stroke-linejoin: round;
+  }
+
+  .tg-half-tech {
+    fill: var(--sticky-blue);
+  }
+
+  .tg-half-not {
+    fill: var(--sticky-pink);
+  }
+
+  .tg-hub {
+    fill: var(--card);
+  }
+
+  .tg-label {
+    fill: var(--ink);
+    font-family: var(--font-hand);
+    font-size: 17px;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .tg-pointer {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    z-index: 1;
+    width: 26px;
+    height: 24px;
+    margin-left: -13px;
+    overflow: visible;
+    fill: var(--red-pen);
+    stroke: var(--text);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    transform-origin: 50% 10%;
+  }
+
+  /* --- The answer side --- */
+
+  .tg-side {
+    display: flex;
+    flex: 1 1 200px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  /* Prompt and reveal share one cell, tall enough for the reveal, so nothing jumps. */
+  .tg-msg {
+    display: grid;
+    align-items: center;
+    width: 100%;
+    min-height: 6.5rem;
+  }
+
+  .tg-prompt,
+  .tg-reveal {
+    grid-area: 1 / 1;
+  }
+
+  .tg-prompt {
+    color: var(--text-muted);
+    font-family: var(--font-hand);
+    font-size: 1.375rem;
+    line-height: 1.3;
+  }
+
+  .tg-reveal {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .tg-result {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+
+  .tg-result .strike {
+    color: var(--text-soft);
+    text-decoration-thickness: 3px;
+  }
+
+  .tg-final {
+    flex-basis: 100%;
+    font-size: 1.625rem;
+    line-height: 1.2;
+  }
+
+  .tg-quip {
+    color: var(--red-pen);
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    line-height: 1.25;
+    transform: rotate(-1.5deg);
+    transform-origin: left center;
+  }
+
+  .tg-quip:empty {
+    display: none;
+  }
+
+  .tg-button[aria-disabled="true"],
+  .tg-button[aria-disabled="true"]:hover {
+    background: var(--ink);
+    cursor: progress;
+    opacity: 0.55;
+  }
+
+  /* After a game, the answer arrives in beats. The global reduced-motion rule flattens these. */
+  .tg.is-played .tg-result > *,
+  .tg.is-played .tg-quip {
+    animation: tg-in 0.35s ease-out both;
+  }
+
+  .tg.is-played .tg-final {
+    animation-delay: 0.35s;
+  }
+
+  .tg.is-played .tg-quip {
+    animation-delay: 0.7s;
+  }
+
+  @keyframes tg-in {
+    from {
+      opacity: 0;
+      translate: 0 6px;
+    }
+  }
+
+  @media (max-width: 639.98px) {
+    .tg {
+      padding: 18px 20px 22px;
+      transform: none;
+    }
+
+    .tg-play {
+      justify-content: center;
+    }
+
+    .tg-side {
+      flex-basis: 100%;
+    }
+  }
+</style>
+
+<script>
+  type Game = "coin" | "wheel";
+
+  const VISITS_KEY = "nnt-technical-visits";
+  const COIN_MS = 3000;
+  const WHEEL_MS = 3300;
+
+  // Odd visits get the coin, even visits the wheel. No storage? Pick one at random.
+  function pickGame(): Game {
+    try {
+      const visits = (Number.parseInt(localStorage.getItem(VISITS_KEY) ?? "0", 10) || 0) + 1;
+      localStorage.setItem(VISITS_KEY, String(visits));
+      return visits % 2 === 1 ? "coin" : "wheel";
+    } catch {
+      return Math.random() < 0.5 ? "coin" : "wheel";
+    }
+  }
+
+  /** Plays keyframes, then bakes the end state into inline style so animations don't pile up. */
+  async function play(el: HTMLElement, frames: Keyframe[], duration: number): Promise<void> {
+    const animation = el.animate(frames, { duration, fill: "forwards" });
+    try {
+      await animation.finished;
+    } catch {
+      // Cancelled; the end state below still applies.
+    }
+    el.style.transform = String(frames[frames.length - 1].transform);
+    animation.cancel();
+  }
+
+  /** Smallest angle at or past `min` that lands on `target` (mod 360). */
+  function nextAngle(min: number, target: number): number {
+    return min + ((((target - min) % 360) + 360) % 360);
+  }
+
+  function init(root: HTMLElement) {
+    const stage = root.querySelector<HTMLElement>("[data-tg-stage]");
+    const coin = root.querySelector<HTMLElement>("[data-tg-coin]");
+    const coinSpin = root.querySelector<HTMLElement>("[data-tg-coin-spin]");
+    const wheel = root.querySelector<HTMLElement>("[data-tg-wheel]");
+    const wheelSpin = root.querySelector<HTMLElement>("[data-tg-wheel-spin]");
+    const pointer = root.querySelector<SVGElement>("[data-tg-pointer]");
+    const prompt = root.querySelector<HTMLElement>("[data-tg-prompt]");
+    const reveal = root.querySelector<HTMLElement>("[data-tg-reveal]");
+    const result = root.querySelector<HTMLElement>("[data-tg-result]");
+    const quip = root.querySelector<HTMLElement>("[data-tg-quip]");
+    const button = root.querySelector<HTMLButtonElement>("[data-tg-button]");
+    if (
+      !stage || !coin || !coinSpin || !wheel || !wheelSpin || !pointer ||
+      !prompt || !reveal || !result || !quip || !button
+    ) {
+      return;
+    }
+
+    const game = pickGame();
+    const isCoin = game === "coin";
+    const startLabel = isCoin ? "Flip the coin" : "Spin the wheel";
+    const repeatQuips = [
+      "still undecided.",
+      isCoin ? "the coin has spoken. sort of." : "the wheel has spoken. sort of.",
+      "best of three?",
+      "best of five?",
+      "it's not broken. it's just honest.",
+    ];
+
+    let coinAngle = 0;
+    let wheelAngle = 0;
+    let plays = 0;
+    let running = false;
+
+    // Swap the static reveal for the game.
+    stage.setAttribute(
+      "aria-label",
+      isCoin
+        ? "A coin with technical on one side and not technical on the other."
+        : "A prize wheel, half technical and half not technical.",
+    );
+    (isCoin ? coin : wheel).hidden = false;
+    stage.hidden = false;
+    reveal.replaceChildren();
+    prompt.textContent = isCoin ? "Two sides. One coin. Let's settle this." : "Two halves. One spin. Let's settle this.";
+    prompt.hidden = false;
+    button.textContent = startLabel;
+    button.hidden = false;
+
+    // Spins, slows onto one face, nearly settles, then tips up onto its edge and wobbles there.
+    async function flipCoin(reduced: boolean) {
+      const face = Math.random() < 0.5 ? 0 : 180;
+      const end = nextAngle(coinAngle + 1700, face + 88);
+      if (reduced) {
+        coinAngle = end % 360;
+        coinSpin!.style.transform = `rotateY(${coinAngle}deg)`;
+        return;
+      }
+      const spin = play(
+        coinSpin!,
+        [
+          { transform: `rotateY(${coinAngle}deg)`, easing: "cubic-bezier(.18,.6,.32,1)" },
+          { transform: `rotateY(${end - 113}deg)`, offset: 0.56, easing: "cubic-bezier(.3,.3,.6,1)" },
+          { transform: `rotateY(${end - 97}deg)`, offset: 0.72, easing: "cubic-bezier(.55,0,.85,.4)" },
+          { transform: `rotateY(${end + 7}deg)`, offset: 0.84, easing: "ease-in-out" },
+          { transform: `rotateY(${end - 5}deg)`, offset: 0.905, easing: "ease-in-out" },
+          { transform: `rotateY(${end + 2.5}deg)`, offset: 0.955, easing: "ease-in-out" },
+          { transform: `rotateY(${end}deg)` },
+        ],
+        COIN_MS,
+      );
+      const toss = play(
+        coin!,
+        [
+          { transform: "translateY(0)", easing: "cubic-bezier(.2,.7,.4,1)" },
+          { transform: "translateY(-30px)", offset: 0.2, easing: "cubic-bezier(.6,0,.8,.4)" },
+          { transform: "translateY(0)", offset: 0.46, easing: "ease-out" },
+          { transform: "translateY(-5px)", offset: 0.52, easing: "ease-in" },
+          { transform: "translateY(0)", offset: 0.58 },
+          { transform: "translateY(0)" },
+        ],
+        COIN_MS,
+      );
+      await Promise.all([spin, toss]);
+      coinAngle = end % 360;
+      coinSpin!.style.transform = `rotateY(${coinAngle}deg)`;
+    }
+
+    // Long spin, a slow creep that nearly stops inside one half, then a last nudge onto the line.
+    // The direction decides which half it flirts with; it always ends upright on the divider.
+    async function spinWheel(reduced: boolean) {
+      if (reduced) {
+        wheelAngle = 0;
+        wheelSpin!.style.transform = "rotate(0deg)";
+        return;
+      }
+      const dir = Math.random() < 0.5 ? 1 : -1;
+      const end =
+        dir === 1 ? Math.ceil((wheelAngle + 1440) / 360) * 360 : Math.floor((wheelAngle - 1440) / 360) * 360;
+      const spin = play(
+        wheelSpin!,
+        [
+          { transform: `rotate(${wheelAngle}deg)`, easing: "cubic-bezier(.15,.6,.4,.9)" },
+          { transform: `rotate(${end - dir * 58}deg)`, offset: 0.55, easing: "cubic-bezier(.2,.5,.45,1)" },
+          { transform: `rotate(${end - dir * 8}deg)`, offset: 0.82, easing: "cubic-bezier(.45,0,.55,1)" },
+          { transform: `rotate(${end + dir * 2.5}deg)`, offset: 0.95, easing: "ease-out" },
+          { transform: `rotate(${end}deg)` },
+        ],
+        WHEEL_MS,
+      );
+      // The pointer flicks as the divider clicks past it at the very end.
+      const tick = pointer!.animate(
+        [
+          { transform: "rotate(0deg)" },
+          { transform: `rotate(${dir * -16}deg)`, offset: 0.4 },
+          { transform: `rotate(${dir * 5}deg)`, offset: 0.75 },
+          { transform: "rotate(0deg)" },
+        ],
+        { duration: 380, delay: WHEEL_MS * 0.89, easing: "ease-out" },
+      );
+      await Promise.all([spin, tick.finished.catch(() => undefined)]);
+      wheelAngle = 0;
+      wheelSpin!.style.transform = "rotate(0deg)";
+    }
+
+    button.addEventListener("click", async () => {
+      if (running) return;
+      running = true;
+      // aria-disabled, not disabled, so keyboard focus stays on the button.
+      button.setAttribute("aria-disabled", "true");
+      reveal.replaceChildren();
+      prompt.textContent = isCoin ? "flipping…" : "spinning…";
+      prompt.hidden = false;
+
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      await (isCoin ? flipCoin(reduced) : spinWheel(reduced));
+
+      plays += 1;
+      quip.textContent =
+        plays === 1
+          ? isCoin
+            ? "it landed on its edge. of course it did."
+            : "dead on the line. of course it did."
+          : repeatQuips[(plays - 2) % repeatQuips.length];
+      prompt.hidden = true;
+      root.classList.add("is-played");
+      reveal.replaceChildren(result, quip);
+      button.textContent = "Try again";
+      button.removeAttribute("aria-disabled");
+      running = false;
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>("[data-tg]").forEach(init);
+</script>
