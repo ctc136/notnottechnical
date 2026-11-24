@@ -4,7 +4,7 @@ date: 2026-11-23
 entry: 1
 summary: "A Stackchan robot, a live NHL score feed and a full-on goal celebration with lights, head banging and an announcement from the late, legendary announcer Mike Lange."
 tags: [hardware, ai-tools]
-draft: true
+draft: false
 scoreboard:
   hours: 5
   shipped: 1
