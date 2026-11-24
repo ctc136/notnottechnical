@@ -27,8 +27,6 @@ Stackchan is a little open source robot you can reprogram to do all kinds of coo
 
 After hooking Vern up to my Mac with a double-sided USB-C cable, it was time to go to work with Claude Code. Claude Code will walk you through the reprogramming step by step, and it only takes about 30 minutes. Quick heads-up: I built on top of M5Stack's own firmware, so Vern's built-in voice assistant still works. The one thing you lose is M5Stack's phone app, which won't connect to a robot running your own build.
 
-Tip: I used Muse to pull the audio clips from a video platform. It did a great job finding, snipping and delivering clean audio files of Mike Lange's announcements.
-
 ## The tech stack
 
 - **The robot:** M5Stack StackChan (K151) with a CoreS3 controller
@@ -56,6 +54,7 @@ Tip: I used Muse to pull the audio clips from a video platform. It did a great j
 - Start from the manufacturer's firmware and add to it, rather than rebuilding the robot's features from scratch: [m5stack/StackChan on GitHub](https://github.com/m5stack/StackChan)
 - The NHL API has no official docs; a community reference covers the schedule and live-game endpoints: [NHL API Reference (unofficial)](https://github.com/Zmalski/NHL-API-Reference)
 - When audio sounds bad, test with everything else switched off before re-encoding the files; here the lights were the cause: [ffmpeg audio filters](https://ffmpeg.org/ffmpeg-filters.html)
+- I used Muse to pull the audio clips from a video platform. It did a great job finding, snipping and delivering clean audio files of Mike Lange's announcements.
 
 ## What I learned
 
