@@ -14,6 +14,13 @@ scoreboard:
 
 "Scratch my back with a hacksaw!" in Mike Lange's voice belted out from my tiny little robot after Sidney Crosby buried a puck in the net.
 
+<figure>
+  <video controls playsinline preload="metadata" width="720" height="1280" poster="/images/vern-goal-dance-poster.jpg" aria-label="Vern the robot flashing a GOAL! screen for Sidney Crosby, playing a Mike Lange goal call and dancing">
+    <source src="/videos/vern-goal-dance.mp4" type="video/mp4">
+  </video>
+  <figcaption>Vern celebrating a (staged) Crosby goal. Sound on!</figcaption>
+</figure>
+
 ## What I built
 
 Stackchan is a little open source robot you can reprogram to do all kinds of cool stuff. I'm gonna call mine Vern. My first idea was to make him a huge Pittsburgh Penguins fan. The plan was to make Vern light up, shake his head and say one of Mike Lange's famous sayings, like "Get in the fast lane, grandma, the bingo game is ready to roll!"

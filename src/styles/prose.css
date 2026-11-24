@@ -94,6 +94,18 @@
   background: var(--card);
 }
 
+/* Videos get the same frame. Capped so a phone-shot portrait clip doesn't tower over the text. */
+.prose video {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  margin-inline: auto;
+  border: var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+}
+
 /* Optional caption: put a line of *italic text* directly under the image. */
 .prose img + em,
 .prose figcaption {
