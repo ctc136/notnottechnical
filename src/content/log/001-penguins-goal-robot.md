@@ -25,7 +25,7 @@ scoreboard:
 
 Stackchan is a little open source robot you can reprogram to do all kinds of cool stuff. I'm gonna call mine Vern. My first idea was to make him a huge Pittsburgh Penguins fan. The plan was to make Vern light up, shake his head and say one of Mike Lange's famous sayings, like "Get in the fast lane, grandma, the bingo game is ready to roll!"
 
-After hooking Vern up to my Mac with a double-sided USB-C cable, it was time to go to work with Claude Code. Claude Code will walk you through the reprogramming step by step, and it only takes about 30 minutes. Quick heads-up: I built on top of M5Stack's own firmware, so Vern's built-in voice assistant still works. The one thing you lose is M5Stack's phone app, which won't connect to a robot running your own build.
+After hooking Vern up to my Mac with a USB-C cable, it was time to go to work with Claude Code. Claude Code will walk you through the reprogramming step by step, and it only takes about 30 minutes. Quick heads-up: I built on top of M5Stack's own firmware, so Vern's built-in voice assistant still works. The one thing you lose is M5Stack's phone app, which won't connect to a robot running your own build.
 
 ## The tech stack
 
@@ -45,7 +45,7 @@ After hooking Vern up to my Mac with a double-sided USB-C cable, it was time to 
 
 ## What broke
 
-- **Choppy, garbled goal-call audio**: The real Mike Lange clips sounded really choppy on the robot. The cause was the side lights, not the audio files: each step of a light fade added some stress to the system and starved audio playback. Fix: I switched the lights instantly during the first 5 seconds and brought the fades back for the dance after the audio. I also kept Vern from moving and grooving for 5 seconds (until the Mike Lange audio finishes), since the whirring motors can be loud. The dancing now kicks in at the 5 second mark and lasts until the 30 second mark.
+- **Choppy, garbled goal-call audio**: The real Mike Lange clips sounded really choppy on the robot. The cause was the side lights, not the audio files. Fix: I made the lights blink instead of fade while Mike Lange is talking. Fading turned out to be a lot of work for the little guy, and he couldn't do that and talk at the same time. I also kept Vern from moving and grooving for 5 seconds (until the Mike Lange audio finishes), since the whirring motors can be loud. The dancing now kicks in at the 5 second mark and lasts until the 30 second mark.
 
 - **Celebration would spoil a delayed TV stream**: The first time Vern celebrated a Penguins goal, it actually happened BEFORE I saw the goal! I realized the app I was watching on my TV was delayed by about 45 seconds, so Vern got a heads-up on the goal before it showed on my TV. I couldn't have Vern spoiling all the goals, so I gave him a 15 second delay, which seems to work out well since he checks the API every 15 seconds.
 
@@ -53,7 +53,7 @@ After hooking Vern up to my Mac with a double-sided USB-C cable, it was time to 
 
 - Start from the manufacturer's firmware and add to it, rather than rebuilding the robot's features from scratch: [m5stack/StackChan on GitHub](https://github.com/m5stack/StackChan)
 - The NHL API has no official docs; a community reference covers the schedule and live-game endpoints: [NHL API Reference (unofficial)](https://github.com/Zmalski/NHL-API-Reference)
-- When audio sounds bad, test with everything else switched off before re-encoding the files; here the lights were the cause: [ffmpeg audio filters](https://ffmpeg.org/ffmpeg-filters.html)
+- When audio sounds bad, switch everything else off and test again before messing with the audio files; in my case the lights were the cause.
 - I used Muse to pull the audio clips from a video platform. It did a great job finding, snipping and delivering clean audio files of Mike Lange's announcements.
 
 ## What I learned
